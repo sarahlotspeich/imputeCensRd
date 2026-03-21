@@ -5,7 +5,7 @@
 #' @param imputation_model Imputation model formula (or coercible to formula), a formula expression as for other regression models. The response is usually a survival object as returned by the \code{Surv} function. See the documentation for \code{Surv} for details.
 #' @param analysis_model Analysis model formula (or coercible to formula), a formula expression as for other regression models. The response should be a continuous outcome for normal linear regression.
 #' @param data Dataframe or named matrix containing columns \code{W}, \code{Delta}, and \code{Z}.
-#' @param integral A string input for how to approximate the integral in the imputed values. Default is \code{integral="aq"} for adaptive quadrature, but \code{"tr"} (trapezoidal rule) and \code{"a"} (quasi-analytical) are also available.
+#' @param trapezoidal_rule A logical input for how to approximate the integral in the imputed values. Default is \code{trapezoidal_rule=FALSE} to use adaptive quadrature, but \code{"tr"}, and \code{trapezoidal_rule=TRUE} will use the trapezoidal rule.
 #' @param Xmax (Optional) Upper limit of the domain of the censored predictor. Default is \code{Xmax = Inf}.
 #' @param surv_between A string for the method to be used to interpolate for censored values between events. Options include \code{"cf"} (carry forward, the default), \code{"wm"} (weighted mean), or \code{"m"} (mean).
 #' @param surv_beyond A string for the method to be used to extrapolate the survival curve beyond the last observed event. Options include \code{"d"} (immediate drop off), \code{"e"} (exponential extension, the default), or \code{"w"} (weibull extension).
@@ -17,7 +17,7 @@
 #'
 #' @export
 
-cmi_sp_bootstrap = function(imputation_model, analysis_model, data, integral = "aq", Xmax = Inf, surv_between = "cf", surv_beyond = "e", maxiter = 100, B = 10) {
+cmi_sp_bootstrap = function(imputation_model, analysis_model, data, trapezoidal_rule = TRUE, Xmax = Inf, surv_between = "cf", surv_beyond = "e", maxiter = 100, B = 10) {
   # Size of resample -----------------------------------------------------------
   n = nrow(data)
   
@@ -51,7 +51,7 @@ cmi_sp_bootstrap = function(imputation_model, analysis_model, data, integral = "
       # Use imputeCensRd::cmi_sp() to impute censored x in re_data -------------
       re_data_imp = cmi_sp(imputation_model = imputation_model, 
                            data = re_data, 
-                           integral = integral, 
+                           trapezoidal_rule = trapezoidal_rule, 
                            Xmax = Xmax,
                            surv_between = surv_between, 
                            surv_beyond = surv_beyond)
@@ -76,7 +76,7 @@ cmi_sp_bootstrap = function(imputation_model, analysis_model, data, integral = "
         # Use imputeCensRd::cmi_sp() to impute censored x in re_data -------------
         re_data_imp = cmi_sp(imputation_model = imputation_model, 
                              data = re_data, 
-                             integral = integral, 
+                             trapezoidal_rule = trapezoidal_rule, 
                              Xmax = Xmax,
                              surv_between = surv_between, 
                              surv_beyond = surv_beyond)

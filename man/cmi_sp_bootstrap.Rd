@@ -8,7 +8,7 @@ cmi_sp_bootstrap(
   imputation_model,
   analysis_model,
   data,
-  integral = "aq",
+  trapezoidal_rule = TRUE,
   Xmax = Inf,
   surv_between = "cf",
   surv_beyond = "e",
@@ -23,7 +23,7 @@ cmi_sp_bootstrap(
 
 \item{data}{Dataframe or named matrix containing columns \code{W}, \code{Delta}, and \code{Z}.}
 
-\item{integral}{A string input for how to approximate the integral in the imputed values. Default is \code{integral="aq"} for adaptive quadrature, but \code{"tr"} (trapezoidal rule) and \code{"a"} (quasi-analytical) are also available.}
+\item{trapezoidal_rule}{A logical input for how to approximate the integral in the imputed values. Default is \code{trapezoidal_rule=FALSE} to use adaptive quadrature, but \code{"tr"}, and \code{trapezoidal_rule=TRUE} will use the trapezoidal rule.}
 
 \item{Xmax}{(Optional) Upper limit of the domain of the censored predictor. Default is \code{Xmax = Inf}.}
 
